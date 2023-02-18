@@ -1,0 +1,45 @@
+package repositories
+
+import (
+	"davisbento/golang-encoder/domain"
+	"fmt"
+	"github.com/jinzhu/gorm"
+	uuid "github.com/satori/go.uuid"
+)
+
+type VideoRepository interface {
+	Insert(video *domain.Video) (*domain.Video, error)
+	Find(id string) (*domain.Video, error)
+}
+
+type VideoRepositoryDb struct {
+	DbConn *gorm.DB
+}
+
+func NewVideoRepository(db *gorm.DB) *VideoRepositoryDb {
+	return &VideoRepositoryDb{DbConn: db}
+}
+
+func (repo VideoRepositoryDb) Insert(video *domain.Video) (*domain.Video, error) {
+	if video.ID == "" {
+		video.ID = uuid.NewV4().String()
+	}
+
+	err := repo.DbConn.Create(video).Error
+	if err != nil {
+		return nil, err
+	}
+
+	return video, nil
+}
+
+func (repo VideoRepositoryDb) Find(id string) (*domain.Video, error) {
+	var video domain.Video
+	repo.DbConn.First(&video, "id = ?", id)
+
+	if video.ID == "" {
+		return nil, fmt.Errorf("Video not found")
+	}
+
+	return &video, nil
+}
