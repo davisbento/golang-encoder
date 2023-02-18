@@ -3,6 +3,8 @@ package database
 import (
 	"davisbento/golang-encoder/domain"
 	"github.com/jinzhu/gorm"
+	_ "github.com/jinzhu/gorm/dialects/sqlite"
+	_ "github.com/lib/pq"
 	log "github.com/sirupsen/logrus"
 )
 
@@ -57,6 +59,7 @@ func (db *Database) Connect() (*gorm.DB, error) {
 
 	if db.AutoMigration {
 		db.DB.AutoMigrate(&domain.Video{}, &domain.Job{})
+		db.DB.Model(&domain.Job{}).AddForeignKey("video_id", "videos(id)", "CASCADE", "CASCADE")
 	}
 
 	return db.DB, nil
