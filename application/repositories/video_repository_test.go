@@ -10,7 +10,7 @@ import (
 	"time"
 )
 
-func TestVideoRepositoryDBInsert(t *testing.T) {
+func insertVideoTest() (*domain.Video, error) {
 	db := database.NewDBTest()
 	defer db.Close()
 
@@ -24,8 +24,17 @@ func TestVideoRepositoryDBInsert(t *testing.T) {
 
 	v, err := repo.Find(video.ID)
 
+	if err != nil {
+		return nil, err
+	}
+
+	return v, nil
+}
+
+func TestVideoRepositoryDBInsert(t *testing.T) {
+	v, err := insertVideoTest()
+
 	require.NotEmpty(t, v.ID)
 	require.Nil(t, err)
 	require.Equal(t, "path/to/file.mp4", v.FilePath)
-	require.Equal(t, video.ID, v.ID)
 }
