@@ -11,7 +11,7 @@ type Video struct {
 	FilePath   string    `json:"file_path" valid:"notnull" gorm:"type:varchar(255)"`
 	CreatedAt  time.Time `json:"-" valid:"-"`
 	UpdateAt   time.Time `json:"-" valid:"-"`
-	Jobs       []Job     `json:"jobs" valid:"-" gorm:"foreignKey:VideoID"`
+	Jobs       []Job     `json:"jobs" valid:"-" gorm:"ForeignKey:VideoID"`
 }
 
 func init() {
