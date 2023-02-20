@@ -18,7 +18,6 @@ func insertVideoTest() (*domain.Video, error) {
 	video.ID = uuid.NewV4().String()
 	video.FilePath = "path/to/file.mp4"
 	video.CreatedAt = time.Now()
-
 	repo := repositories.NewVideoRepository(db)
 	repo.Insert(video)
 

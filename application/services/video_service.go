@@ -6,7 +6,7 @@ import (
 	"davisbento/golang-encoder/application/repositories"
 	"davisbento/golang-encoder/domain"
 	log "github.com/sirupsen/logrus"
-	"io"
+	"io/ioutil"
 	"os"
 	"os/exec"
 )
@@ -38,7 +38,7 @@ func (service *VideoService) Download(bucketName string) error {
 
 	defer reader.Close()
 
-	body, err := io.ReadAll(reader)
+	body, err := ioutil.ReadAll(reader)
 	if err != nil {
 		return err
 	}
