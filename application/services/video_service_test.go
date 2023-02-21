@@ -36,10 +36,19 @@ func prepare() (*domain.Video, repositories.VideoRepositoryDb) {
 func TestVideoServiceDownload(t *testing.T) {
 	video, repo := prepare()
 
-	repo.Insert(video)
+	service := services.NewVideoService()
+	service.Video = video
+	service.VideoRepository = repo
 
-	service := services.VideoService{Video: video, VideoRepository: repo}
 	err := service.Download("bucket-test-for-encoder")
+	require.Nil(t, err)
 
+	err = service.Fragment()
+	require.Nil(t, err)
+
+	err = service.Encode()
+	require.Nil(t, err)
+
+	err = service.Finish()
 	require.Nil(t, err)
 }
