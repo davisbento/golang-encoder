@@ -8,6 +8,7 @@ import (
 	dotenv "github.com/joho/godotenv"
 	uuid "github.com/satori/go.uuid"
 	"github.com/stretchr/testify/require"
+	"os"
 	"testing"
 	"time"
 )
@@ -40,7 +41,7 @@ func TestVideoServiceDownload(t *testing.T) {
 	service.Video = video
 	service.VideoRepository = repo
 
-	err := service.Download("bucket-test-for-encoder")
+	err := service.Download(os.Getenv("BUCKET_NAME"))
 	require.Nil(t, err)
 
 	err = service.Fragment()
